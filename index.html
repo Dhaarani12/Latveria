@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LATVERIA // SOVEREIGN SYSTEM</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --color-dark:#050505;
+    --color-dark-2:#0b0e0e;
+    --color-panel:#0e1414;
+    --color-metal:#151c1c;
+    --color-border:#242c2c;
+    --color-border-bright:#3a4444;
+    --color-accent:#ff2a42;
+    --color-accent-dim:#7a1420;
+    --color-text-primary:#f2f0ea;
+    --color-text-secondary:#9aa3a3;
+    --color-text-muted:#5d6666;
+
+    --font-display:'Syne', 'Space Grotesk', sans-serif;
+    --font-body:'Space Grotesk', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+
+    --section-pad-x:80px;
+    --section-pad-y:129px;
+
+    --safe-t:env(safe-area-inset-top,0px);
+    --safe-b:env(safe-area-inset-bottom,0px);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{
+    scroll-behavior:smooth;
+    scroll-padding-top:var(--safe-t);
+  }
+
+  body{
+    background:var(--color-dark);
+    color:var(--color-text-primary);
+    font-family:var(--font-body);
+    font-size:16px;
+    line-height:1.6;
+    overflow-x:hidden;
+    padding-top:var(--safe-t);
+    padding-bottom:var(--safe-b);
+  }
+
+  img{max-width:100%; display:block;}
+
+  a{color:inherit; text-decoration:none;}
+
+  ::selection{background:var(--color-accent); color:#0a0a0a;}
+
+  :focus-visible{
+    outline:2px solid var(--color-accent);
+    outline-offset:3px;
+  }
+
+  .wrap{ max-width:1440px; margin:0 auto; }
+  .scrollx{ overflow-x:auto; }
+
+  /* ---------- Reduced motion ---------- */
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+
+  /* ================= NAVIGATION ================= */
+
+  .nav{
+    position:fixed;
+    top:var(--safe-t);
+    left:0; right:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:22px var(--section-pad-x);
+    background:rgba(5,5,5,0.72);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--color-border);
+  }
+
+  .nav-progress{
+    position:fixed;
+    top:var(--safe-t);
+    left:0;
+    height:2px;
+    background:var(--color-accent);
+    box-shadow:0 0 12px var(--color-accent);
+    z-index:101;
+    width:0%;
+    transition:width 80ms linear;
+  }
+
+  .nav-mark{
+    font-family:var(--font-mono);
+    font-size:13px;
+    letter-spacing:0.08em;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+
+  .nav-mark .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--color-accent);
+    box-shadow:0 0 8px var(--color-accent);
+  }
+
+  .nav-links{
+    display:flex;
+    gap:36px;
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:0.06em;
+  }
+
+  .nav-links a{
+    color:var(--color-text-secondary);
+    padding-bottom:4px;
+    border-bottom:1px solid transparent;
+    transition:color 180ms ease, border-color 180ms ease;
+  }
+  .nav-links a:hover, .nav-links a:focus-visible{
+    color:var(--color-text-primary);
+    border-color:var(--color-accent);
+  }
+
+  .nav-status{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--color-text-muted);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  @media (max-width:1024px){
+    .nav-links{ display:none; }
+  }
+
+  /* ================= SECTION SHARED ================= */
+
+  section{
+    padding:var(--section-pad-y) var(--section-pad-x);
+    position:relative;
+  }
+
+  .kicker{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:0.1em;
+    color:var(--color-accent);
+    margin-bottom:28px;
+  }
+
+  /* ================= HERO ================= */
+
+  .hero{
+    min-height:100svh;
+    display:grid;
+    grid-template-columns:1.15fr 1fr;
+    gap:60px;
+    align-items:center;
+    padding-top:calc(var(--section-pad-y) + 40px);
+    background:
+      radial-gradient(ellipse 900px 600px at 78% 40%, rgba(255,42,66,0.10), transparent 60%),
+      linear-gradient(180deg, var(--color-dark) 0%, #08090a 100%);
+  }
+
+  .hero-left{
+    display:flex;
+    flex-direction:column;
+    gap:34px;
+  }
+
+  .hero-classify{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--color-text-muted);
+    display:flex;
+    gap:22px;
+    flex-wrap:wrap;
+    border-left:2px solid var(--color-accent);
+    padding-left:14px;
+  }
+
+  .hero-title{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:clamp(40px, 7.2vw, 104px);
+    line-height:0.98;
+    letter-spacing:-0.01em;
+    text-shadow:0 12px 36px rgba(0,0,0,0.65);
+  }
+
+  .hero-title em{
+    font-style:normal;
+    color:var(--color-accent);
+  }
+
+  .hero-sub{
+    max-width:46ch;
+    color:var(--color-text-secondary);
+    font-size:16px;
+  }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    width:fit-content;
+    padding:16px 26px;
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:0.08em;
+    background:var(--color-accent);
+    color:#0a0a0a;
+    border:1px solid var(--color-accent);
+    box-shadow:0 0 0 rgba(255,42,66,0.0);
+    transition:box-shadow 220ms ease, transform 220ms ease;
+    cursor:pointer;
+  }
+  .btn:hover, .btn:focus-visible{
+    box-shadow:0 0 28px rgba(255,42,66,0.55);
+    transform:translateY(-1px);
+  }
+  .btn.ghost{
+    background:transparent;
+    color:var(--color-text-primary);
+    border:1px solid var(--color-border-bright);
+  }
+  .btn.ghost:hover{
+    border-color:var(--color-accent);
+    box-shadow:0 0 20px rgba(255,42,66,0.25);
+  }
+
+  .hero-telemetry{
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--color-text-secondary);
+    border:1px solid var(--color-border);
+    padding:10px 16px;
+    width:fit-content;
+    background:rgba(255,255,255,0.02);
+  }
+  .hero-telemetry .pulse{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--color-accent);
+    animation:pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:1; box-shadow:0 0 0 rgba(255,42,66,0.6);}
+    50%{ opacity:0.4; box-shadow:0 0 10px rgba(255,42,66,0.6);}
+  }
+
+  .hero-footer{
+    margin-top:16px;
+    padding-top:26px;
+    border-top:1px solid var(--color-border);
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:20px;
+    max-width:640px;
+  }
+  .hero-footer div{ font-family:var(--font-mono); }
+  .hero-footer .label{
+    font-size:10px; color:var(--color-text-muted); letter-spacing:0.08em; margin-bottom:6px;
+  }
+  .hero-footer .value{ font-size:13px; color:var(--color-text-primary); }
+
+  /* ---- 3D / holographic scene ---- */
+  .scene{
+    position:relative;
+    aspect-ratio:1/1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .scene-glow{
+    position:absolute;
+    width:70%; height:70%;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,42,66,0.35), transparent 65%);
+    filter:blur(10px);
+    animation:float 6s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{ transform:translateY(0) scale(1); }
+    50%{ transform:translateY(-14px) scale(1.03); }
+  }
+
+  .helmet{
+    position:relative;
+    width:52%;
+    aspect-ratio:0.86/1;
+    z-index:2;
+  }
+  .helmet-shape{
+    position:absolute; inset:0;
+    background:
+      linear-gradient(155deg, #2a3232 0%, #121616 46%, #060707 100%);
+    clip-path:polygon(50% 0%, 82% 10%, 96% 38%, 88% 72%, 68% 100%, 32% 100%, 12% 72%, 4% 38%, 18% 10%);
+    box-shadow:inset 0 0 40px rgba(0,0,0,0.6), 0 30px 60px rgba(0,0,0,0.6);
+  }
+  .helmet-seam{
+    position:absolute; left:50%; top:6%; bottom:8%;
+    width:1px;
+    background:linear-gradient(180deg, transparent, rgba(255,42,66,0.5), transparent);
+    transform:translateX(-50%);
+  }
+  .helmet-eyes{
+    position:absolute; top:40%; left:50%; transform:translate(-50%,-50%);
+    display:flex; gap:14%;
+    width:60%;
+  }
+  .helmet-eyes span{
+    flex:1; aspect-ratio:1.6/1;
+    background:var(--color-accent);
+    box-shadow:0 0 18px 4px rgba(255,42,66,0.8);
+    clip-path:polygon(0 30%, 100% 0, 100% 70%, 0 100%);
+  }
+
+  .reticle{
+    position:absolute;
+    width:88%; height:88%;
+    border:1px dashed var(--color-border-bright);
+    border-radius:50%;
+    animation:spin 22s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .reticle::before, .reticle::after{
+    content:"";
+    position:absolute; background:var(--color-text-muted);
+  }
+  .reticle::before{ left:50%; top:-1px; width:1px; height:100%; opacity:0.25; }
+  .reticle::after{ top:50%; left:-1px; height:1px; width:100%; opacity:0.25; }
+
+  .hud-tag{
+    position:absolute;
+    font-family:var(--font-mono);
+    font-size:10px;
+    letter-spacing:0.06em;
+    color:var(--color-text-secondary);
+    background:rgba(5,5,5,0.75);
+    border:1px solid var(--color-border);
+    padding:8px 12px;
+    backdrop-filter:blur(4px);
+  }
+  .hud-tag .v{ color:var(--color-accent); margin-left:6px; }
+  .hud-tag.top-left{ top:6%; left:0%; }
+  .hud-tag.right-mid{ top:52%; right:0%; }
+
+  .scanlines{
+    position:absolute; inset:0;
+    background:repeating-linear-gradient(180deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 3px);
+    pointer-events:none;
+    mix-blend-mode:overlay;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .scene-glow, .reticle{ animation:none; }
+  }
+
+  @media (max-width:1024px){
+    .hero{ grid-template-columns:1fr; padding-top:calc(var(--section-pad-y) + 70px); gap:50px;}
+    .scene{ order:-1; max-width:340px; margin:0 auto; }
+    .hero-footer{ grid-template-columns:repeat(2,1fr); max-width:100%; }
+  }
+  @media (max-width:768px){
+    section{ padding-left:28px; padding-right:28px; }
+    .hero{ padding-top:110px; }
+  }
+  @media (max-width:480px){
+    .hero-classify{ font-size:10px; gap:12px; }
+    .hero-footer{ grid-template-columns:1fr 1fr; }
+  }
+
+  /* ================= SOVEREIGN ================= */
+
+  .sovereign{
+    background:var(--color-dark);
+    border-top:1px solid var(--color-border);
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:70px;
+  }
+
+  .sov-title{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:clamp(34px, 5.5vw, 88px);
+    line-height:1.02;
+    word-spacing:0.02em;
+    margin-bottom:20px;
+  }
+
+  .sov-sub{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:0.05em;
+    color:var(--color-text-secondary);
+    margin-bottom:34px;
+  }
+
+  blockquote{
+    border-left:2px solid var(--color-border-bright);
+    padding-left:22px;
+    color:var(--color-text-secondary);
+    font-size:18px;
+    max-width:52ch;
+    margin-bottom:28px;
+  }
+
+  .sov-desc{
+    max-width:58ch;
+    color:var(--color-text-secondary);
+    margin-bottom:34px;
+  }
+
+  .mandate{
+    border:1px solid var(--color-border);
+    padding:24px 26px;
+    max-width:420px;
+    background:linear-gradient(160deg, rgba(255,255,255,0.02), transparent);
+  }
+  .mandate .label{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:var(--color-accent);
+    margin-bottom:10px;
+  }
+  .mandate .sig{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:26px;
+  }
+
+  .registry{
+    border:1px solid var(--color-border);
+    background:var(--color-panel);
+    padding:34px;
+    position:relative;
+    overflow:hidden;
+  }
+  .registry::before{
+    content:"";
+    position:absolute; top:-40%; right:-30%;
+    width:60%; height:60%;
+    background:radial-gradient(circle, rgba(255,42,66,0.18), transparent 70%);
+    pointer-events:none;
+  }
+  .registry-head{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:24px;
+  }
+  .registry-head h3{
+    font-family:var(--font-mono);
+    font-size:13px; letter-spacing:0.08em; color:var(--color-text-secondary);
+  }
+  .badge{
+    font-family:var(--font-mono);
+    font-size:10px; letter-spacing:0.06em;
+    color:var(--color-accent);
+    border:1px solid var(--color-accent-dim);
+    padding:5px 10px;
+    box-shadow:0 0 12px rgba(255,42,66,0.2);
+  }
+  .reg-row{
+    display:flex; justify-content:space-between;
+    padding:13px 0;
+    border-bottom:1px solid var(--color-border);
+    font-family:var(--font-mono);
+    font-size:13px;
+  }
+  .reg-row:last-of-type{ border-bottom:none; }
+  .reg-row .k{ color:var(--color-text-muted); }
+  .reg-row .v{ color:var(--color-text-primary); }
+
+  .bar-track{
+    margin-top:22px;
+    height:5px;
+    background:var(--color-metal);
+    border:1px solid var(--color-border);
+  }
+  .bar-fill{
+    height:100%;
+    width:100%;
+    background:linear-gradient(90deg, var(--color-accent-dim), var(--color-accent));
+    box-shadow:0 0 10px rgba(255,42,66,0.5);
+  }
+  .bar-label{
+    margin-top:10px;
+    font-family:var(--font-mono);
+    font-size:10px;
+    color:var(--color-text-muted);
+    display:flex; justify-content:space-between;
+  }
+
+  .immunity{
+    margin-top:22px;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--color-text-secondary);
+    border-top:1px solid var(--color-border);
+    padding-top:20px;
+  }
+  .immunity .num{
+    font-family:var(--font-display);
+    font-size:30px;
+    color:var(--color-accent);
+  }
+
+  @media (max-width:1024px){
+    .sovereign{ grid-template-columns:1fr; }
+  }
+
+  /* ================= DOOM SYSTEMS ================= */
+
+  .systems{
+    background:var(--color-dark-2);
+    border-top:1px solid var(--color-border);
+  }
+
+  .systems-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:40px;
+    margin-bottom:56px;
+  }
+  .systems-head h2{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:clamp(30px, 4.4vw, 60px);
+  }
+  .systems-head p{
+    max-width:38ch;
+    color:var(--color-text-secondary);
+    text-align:right;
+  }
+
+  .pillars{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1px;
+    background:var(--color-border);
+    border:1px solid var(--color-border);
+    margin-bottom:70px;
+  }
+  .pillar{
+    background:var(--color-dark-2);
+    padding:36px 30px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    min-height:280px;
+  }
+  .pillar .num{
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--color-text-muted);
+  }
+  .pillar h3{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:24px;
+  }
+  .pillar p{
+    color:var(--color-text-secondary);
+    font-size:14px;
+    flex:1;
+  }
+  .pillar .status{
+    display:flex; align-items:center; gap:8px;
+    font-family:var(--font-mono); font-size:10px; letter-spacing:0.06em;
+    color:var(--color-accent);
+  }
+  .pillar .status .d{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--color-accent);
+    box-shadow:0 0 8px var(--color-accent);
+  }
+
+  .diagnostic{
+    border:1px solid var(--color-border);
+    background:var(--color-panel);
+    padding:40px;
+  }
+  .diag-head{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-bottom:34px;
+  }
+  .diag-head h3{
+    font-family:var(--font-mono);
+    font-size:14px; letter-spacing:0.06em;
+  }
+  .metrics{
+    display:grid;
+    grid-template-columns:repeat(5, 1fr);
+    gap:28px;
+  }
+  .metric .label{
+    font-family:var(--font-mono); font-size:10px; color:var(--color-text-muted);
+    letter-spacing:0.05em; margin-bottom:12px; min-height:28px;
+  }
+  .metric .pct{
+    font-family:var(--font-display); font-weight:700; font-size:26px; margin-bottom:10px;
+  }
+
+  @media (max-width:1024px){
+    .pillars{ grid-template-columns:1fr; }
+    .metrics{ grid-template-columns:repeat(2, 1fr); }
+    .systems-head{ flex-direction:column; align-items:flex-start; }
+    .systems-head p{ text-align:left; }
+  }
+
+  /* ================= LATVERIA DOMAIN ================= */
+
+  .domain{
+    background:var(--color-dark);
+    border-top:1px solid var(--color-border);
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:70px;
+  }
+
+  .domain-title{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:clamp(34px, 5.5vw, 88px);
+    line-height:1;
+    margin-bottom:16px;
+  }
+  .domain-sub{
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--color-text-secondary);
+    letter-spacing:0.05em;
+    margin-bottom:30px;
+  }
+
+  .cluster{
+    border:1px solid var(--color-border);
+    background:var(--color-panel);
+    padding:30px;
+  }
+  .cluster .row{
+    display:flex; justify-content:space-between;
+    padding:12px 0;
+    border-bottom:1px solid var(--color-border);
+    font-family:var(--font-mono);
+    font-size:12px;
+  }
+  .cluster .row:last-child{ border-bottom:none; }
+  .cluster .k{ color:var(--color-text-muted); }
+  .cluster .v{ color:var(--color-text-primary); text-align:right; }
+
+  @media (max-width:1024px){ .domain{ grid-template-columns:1fr; } }
+
+  /* ---- final CTA ---- */
+  .finale{
+    position:relative;
+    text-align:center;
+    padding:150px var(--section-pad-x);
+    background:var(--color-dark-2);
+    border-top:1px solid var(--color-border);
+    overflow:hidden;
+  }
+  .finale::before{
+    content:"";
+    position:absolute; top:-20%; left:50%; transform:translateX(-50%);
+    width:60%; height:50%;
+    background:radial-gradient(ellipse, rgba(255,42,66,0.28), transparent 70%);
+    filter:blur(30px);
+  }
+  .finale .kicker{ justify-content:center; display:flex; }
+  .finale h2{
+    font-family:var(--font-display);
+    font-weight:800;
+    font-size:clamp(38px, 8vw, 104px);
+    line-height:0.98;
+    margin-bottom:20px;
+    position:relative;
+  }
+  .finale .sub{
+    color:var(--color-text-secondary);
+    font-family:var(--font-mono);
+    font-size:13px;
+    letter-spacing:0.05em;
+    margin-bottom:44px;
+  }
+  .finale-actions{
+    display:flex; justify-content:center; align-items:center; gap:22px; flex-wrap:wrap;
+    position:relative;
+  }
+
+  /* ---- footer ---- */
+  footer{
+    background:var(--color-dark);
+    border-top:1px solid var(--color-border);
+    padding:34px var(--section-pad-x) calc(34px + var(--safe-b));
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--color-text-muted);
+  }
+  footer .brand{ display:flex; align-items:center; gap:10px; color:var(--color-text-secondary); }
+  footer .brand .dot{ width:6px;height:6px;border-radius:50%; background:var(--color-accent); box-shadow:0 0 8px var(--color-accent); }
+  footer .meta{ display:flex; gap:30px; flex-wrap:wrap; }
+
+  @media (max-width:768px){
+    .finale{ padding:110px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav-progress" id="navProgress"></div>
+
+<nav class="nav">
+  <div class="nav-mark"><span class="dot"></span>LATVERIA</div>
+  <div class="nav-links">
+    <a href="#sovereign">The Sovereign</a>
+    <a href="#systems">Doom Systems</a>
+    <a href="#domain">Latveria Domain</a>
+  </div>
+  <div class="nav-status"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:#3ddc84;box-shadow:0 0 6px #3ddc84;"></span>SYSTEM ONLINE</div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="hero">
+  <div class="hero-left">
+    <div class="hero-classify">
+      <span>CLASSIFICATION: SOVEREIGN</span>
+      <span>49.05°N, 21.90°E</span>
+      <span>DOSSIER 001</span>
+    </div>
+
+    <h1 class="hero-title">THE FORTRESS<br>LATVERIA<br><em>OF TOMORROW</em></h1>
+
+    <p class="hero-sub">A nation governed by precision, defended by will, and built to outlast every empire that came before it. Enter the domain of Victor Von Doom.</p>
+
+    <div style="display:flex; gap:18px; flex-wrap:wrap; align-items:center;">
+      <a href="#domain" class="btn">ENTER LATVERIAN AIRSPACE</a>
+      <span class="hero-telemetry"><span class="pulse"></span>DOOM PROTOCOL — ACTIVE — 00:14:22</span>
+    </div>
+
+    <div class="hero-footer">
+      <div><div class="label">DOMAIN</div><div class="value">LATVERIA.GOV</div></div>
+      <div><div class="label">ENERGY GRID</div><div class="value">100% ONLINE</div></div>
+      <div><div class="label">DEFENSE GRID</div><div class="value">MAXIMUM</div></div>
+      <div><div class="label">AUTHORITY</div><div class="value">ABSOLUTE</div></div>
+    </div>
+  </div>
+
+  <div class="scene" id="scene">
+    <div class="scene-glow"></div>
+    <div class="reticle"></div>
+    <div class="helmet" id="helmet">
+      <div class="helmet-shape"></div>
+      <div class="helmet-seam"></div>
+      <div class="helmet-eyes"><span></span><span></span></div>
+    </div>
+    <div class="hud-tag top-left">POPULATION SHIELD<span class="v">100%</span></div>
+    <div class="hud-tag right-mid">TERRITORIAL INTEGRITY<span class="v">SECURE</span></div>
+    <div class="scanlines"></div>
+  </div>
+</section>
+
+<!-- ================= SOVEREIGN ================= -->
+<section class="sovereign" id="sovereign">
+  <div>
+    <div class="kicker">01 // THE ARCHITECTURE OF POWER</div>
+    <h2 class="sov-title">THE CITADEL OF DOOMSTADT</h2>
+    <div class="sov-sub">ADVANCED METROPOLIS. MEDIEVAL BASTION. ABSOLUTE AUTONOMY.</div>
+
+    <blockquote>Where thousand-year stone walls meet reactors that could power a continent — Doomstadt is not a compromise between eras. It is proof one nation can master all of them.</blockquote>
+
+    <p class="sov-desc">Every street, spire, and subterranean corridor of the capital was designed under a single authority. The result is a city that answers to no external standard — self-sufficient, self-defended, and self-governed, from its power grid to its parapets.</p>
+
+    <div class="mandate">
+      <div class="label">SOVEREIGN MANDATE</div>
+      <div class="sig">V. Von Doom</div>
+    </div>
+  </div>
+
+  <div class="registry">
+    <div class="registry-head">
+      <h3>NATIONAL REGISTRY</h3>
+      <span class="badge">AUTHENTICATED</span>
+    </div>
+
+    <div class="reg-row"><span class="k">JURISDICTION</span><span class="v">Sovereign, Non-Aligned</span></div>
+    <div class="reg-row"><span class="k">CAPITAL</span><span class="v">Doomstadt</span></div>
+    <div class="reg-row"><span class="k">GOVERNANCE</span><span class="v">Absolute Monarchy</span></div>
+    <div class="reg-row"><span class="k">POPULATION STATUS</span><span class="v">Protected</span></div>
+    <div class="reg-row"><span class="k">AIR DEFENSE TIER</span><span class="v">Tier I</span></div>
+    <div class="reg-row"><span class="k">THREAT LEVEL</span><span class="v">Neutralized</span></div>
+
+    <div class="bar-track"><div class="bar-fill"></div></div>
+    <div class="bar-label"><span>BORDER INTEGRITY</span><span>100%</span></div>
+
+    <div class="immunity">
+      <span class="num">47</span>
+      <span>Diplomatic instruments recognized. Status: PERPETUAL.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= DOOM SYSTEMS ================= -->
+<section class="systems" id="systems">
+  <div class="kicker">02 // INFRASTRUCTURE &amp; DOMINION</div>
+  <div class="systems-head">
+    <h2>PILLARS OF THE REALM</h2>
+    <p>Three foundations sustain Latveria's independence — power, defense, and forces beyond conventional science.</p>
+  </div>
+
+  <div class="pillars">
+    <div class="pillar">
+      <span class="num">01 // DEF</span>
+      <h3>DEFENSE GRID</h3>
+      <p>An automated perimeter spanning the entire border, capable of repelling incursion by land, air, or arcane means without human intervention.</p>
+      <span class="status"><span class="d"></span>OPERATIONAL</span>
+    </div>
+    <div class="pillar">
+      <span class="num">02 // FRG</span>
+      <h3>METALLURGIC FORGES</h3>
+      <p>Doomstadt's foundries produce every plate of armor and every reactor housing within the nation's borders — no foreign supply chain required.</p>
+      <span class="status"><span class="d"></span>OPERATIONAL</span>
+    </div>
+    <div class="pillar">
+      <span class="num">03 // ARC</span>
+      <h3>ARCANE SANCTUARY</h3>
+      <p>A warded chamber beneath the citadel where Latveria's oldest defenses — older than its engineering — are kept and maintained.</p>
+      <span class="status"><span class="d"></span>OPERATIONAL</span>
+    </div>
+  </div>
+
+  <div class="diagnostic">
+    <div class="diag-head">
+      <h3>NATIONAL READINESS DIAGNOSTIC</h3>
+      <span class="badge">STATUS: OPERATIONAL</span>
+    </div>
+    <div class="metrics">
+      <div class="metric">
+        <div class="label">BORDER SHIELD</div>
+        <div class="pct">100%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+      </div>
+      <div class="metric">
+        <div class="label">ZERO-POINT ENERGY</div>
+        <div class="pct">98%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:98%"></div></div>
+      </div>
+      <div class="metric">
+        <div class="label">CIVIL DEFENSE</div>
+        <div class="pct">99%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:99%"></div></div>
+      </div>
+      <div class="metric">
+        <div class="label">AUTOMATED SENTINELS</div>
+        <div class="pct">96%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:96%"></div></div>
+      </div>
+      <div class="metric">
+        <div class="label">ARCANE WARDS</div>
+        <div class="pct">94%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:94%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LATVERIA DOMAIN ================= -->
+<section class="domain" id="domain">
+  <div>
+    <div class="kicker">03 // THE SOVEREIGN MONARCH</div>
+    <h2 class="domain-title">VICTOR VON DOOM</h2>
+    <div class="domain-sub">GUARDIAN OF THE BORDER &amp; SOVEREIGN MONARCH</div>
+    <blockquote>A fortress realm needs no permission to exist. It needs only the will to remain standing when every other nation would have fallen.</blockquote>
+  </div>
+
+  <div class="cluster">
+    <div class="row"><span class="k">DOMAIN STATUS</span><span class="v">Secure</span></div>
+    <div class="row"><span class="k">FORTRESS</span><span class="v">Castle Doom</span></div>
+    <div class="row"><span class="k">DEFENSE GRID</span><span class="v">Maximum</span></div>
+    <div class="row"><span class="k">SOVEREIGN</span><span class="v">Victor Von Doom</span></div>
+    <div class="row"><span class="k">COORDINATES</span><span class="v">49.05°N, 21.90°E</span></div>
+    <div class="row"><span class="k">CLASSIFICATION</span><span class="v">Sovereign / Restricted</span></div>
+  </div>
+</section>
+
+<!-- ================= FINALE ================= -->
+<section class="finale" id="finale">
+  <div class="kicker">MANDATORY ACCESSION</div>
+  <h2>LATVERIA STANDS.</h2>
+  <p class="sub">THE SOVEREIGN NATION REMAINS UNCONQUERABLE.</p>
+  <div class="finale-actions">
+    <a href="#hero" class="btn">ENTER LATVERIA</a>
+    <span class="hero-telemetry"><span class="pulse"></span>FINAL STATUS — SECURED</span>
+  </div>
+</section>
+
+<footer>
+  <div class="brand"><span class="dot"></span>LATVERIA // SOVEREIGN SYSTEM — AUTHENTICATED</div>
+  <div class="meta">
+    <span>BORDER STATUS: SECURE</span>
+    <span>DEFENSE GRID: MAXIMUM</span>
+    <span>&copy; 2026 SOVEREIGN DOMAIN</span>
+  </div>
+</footer>
+
+<script>
+  // Scroll progress bar
+  var progress = document.getElementById('navProgress');
+  function updateProgress(){
+    var h = document.documentElement;
+    var scrolled = h.scrollTop;
+    var height = h.scrollHeight - h.clientHeight;
+    var pct = height > 0 ? (scrolled / height) * 100 : 0;
+    progress.style.width = pct + '%';
+  }
+  document.addEventListener('scroll', updateProgress, { passive:true });
+  updateProgress();
+
+  // Mouse-driven helmet parallax (disabled on reduced motion / touch)
+  var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var scene = document.getElementById('scene');
+  var helmet = document.getElementById('helmet');
+  if(scene && helmet && !prefersReduced && matchMedia('(hover:hover)').matches){
+    scene.addEventListener('mousemove', function(e){
+      var rect = scene.getBoundingClientRect();
+      var x = (e.clientX - rect.left) / rect.width - 0.5;
+      var y = (e.clientY - rect.top) / rect.height - 0.5;
+      helmet.style.transform = 'rotate(' + (x * 8) + 'deg) translate(' + (x * 10) + 'px,' + (y * 10) + 'px)';
+    });
+    scene.addEventListener('mouseleave', function(){
+      helmet.style.transform = 'rotate(0deg) translate(0,0)';
+    });
+  }
+</script>
+
+</body>
+</html>
